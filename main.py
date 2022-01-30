@@ -12,20 +12,22 @@ class CNC:
 
     def __init__(self,x,y,position,units,tools,id_proyecto,project_name):
 
-        if units == "pulgadas":
-            units1 = 90 # pulgadas
-        else:
-            units1 = 91 # milimetros
-
-        if position == "absoluto":
-            position1 = 20 # absoluto
-        else:
-            position1 = 21 #incremental
-
-        # if units1 != "pulgadas":
+        units1 = 90
+        position1 = 20
+        # if units == "pulgadas":
+        #     units1 = 90 # pulgadas
+        # else:
         #     units1 = 91 # milimetros
-        # if position1 != "absoluto":
-        #     position1 = 21 # incremental  
+
+        # if position == "absoluto":
+        #     position1 = 20 # absoluto
+        # else:
+        #     position1 = 21 #incremental
+
+        if units != "pulgadas":
+            units1 = 91 # milimetros
+        if position != "absoluto":
+            position1 = 21 # incremental  
         
         self.code += f'O{id_proyecto} ({project_name}) \n'
         self.code += f'T{tools[0]["id"]} M06 \n' 
