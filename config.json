@@ -1,0 +1,22 @@
+{
+    "id_proyecto": 1234,
+    "project_name": "Aleta de Enfriamiento",
+    "name": "Snapmaker 2.0",
+    "position": "absoluto",
+    "units": "pulgadas",
+    "tools": [
+        {
+            "id": 3,
+            "rpm": 7000,
+            "fv": 1.4,
+            "fh": 4
+        },
+        {
+            "id": 1,
+            "rpm": 6500,
+            "fv": 1.6,
+            "fh": 5
+        }
+    ]    
+}
+
