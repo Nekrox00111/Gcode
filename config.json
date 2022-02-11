@@ -1,7 +1,5 @@
 {
-    "id_proyecto": 1234,
-    "project_name": "Aleta de Enfriamiento",
-    "name": "Snapmaker 2.0",
+    "machien_name": "GR-510",
     "position": "absoluto",
     "units": "pulgadas",
     "tools": [
