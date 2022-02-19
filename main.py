@@ -16,7 +16,7 @@ class CNC:
     tools=[]
     refrigerante = False
     position=''
-    #subrutinas = [sr1, sr2]
+
 
     def __init__(self,x,y,position,units,tools,id_proyecto,project_name,depth,z,refrigerante):
         self.project_name = project_name
@@ -30,9 +30,9 @@ class CNC:
         position1 = 20
         
         if units != "pulgadas":
-            units1 = 91 # milimetros
+            units1 = 91
         if position != "absoluto":
-            position1 = 21 # incremental  
+            position1 = 21 
         
         self.code += f'O{id_proyecto} ({project_name}) \n'
         self.code += f'T{self.selected_tool["id"]} M06 ({self.selected_tool["name"]})\n' 
@@ -49,12 +49,10 @@ class CNC:
     def export(self,file_name=''):
         lines = self.code.splitlines()
         code = ''
-        print()
-        # for sub in self.subrutinas:
-        #     sub()
-        #     self.code += 'M99 ({sub.__name__})\n'
+
         for idx, line in enumerate(lines):
             code += f'N{idx}    {line}\n'
+            self.code = code
         
         exported_filename = file_name or f'{self.project_name}.gcode'
 
@@ -119,9 +117,20 @@ class CNC:
             self.code += f'G13 X{x} Y{y} Z{depth} I{I_radio_Arco} K{K_radio} Q{Q} D{self.selected_tool["id"]} F{self.selected_tool["fh"]}\n'
         self.code += f'G00 Z{self.z} G40 \n'
 
-    def move(self,x,y):
-        self.code += f'G00 Z{self.z} G40 \n'
-        self.code += f'G00 X{x} Y{y}\n'
+    def move(self,x,y,out_material=False,cambiar_plano = False):
+        
+        if out_material==True:
+            self.code += f'G00 Z{self.z} G40 \n'
+            self.code += f'G00 X{x} Y{y}\n'
+        elif cambiar_plano == True:
+            if self.plano_taladro_valor == '98':
+                self.plano_taladro_valor = '99'
+                self.code += f'G99 X{x} Y{y}\n'
+            else:
+                self.plano_taladro_valor = '98'
+                self.code += f'G98 X{x} Y{y} \n'
+        else:
+            self.code += f'X{x} Y{y}\n'
         
     def compensacion_ala(self,derecha,x,y):
         if derecha == True:
@@ -132,6 +141,8 @@ class CNC:
     def ciclo_de_taladrado(self,tipo_taladro,plano_taladro,x,y,z,r,p=None,q=None):
         tipo_taladro_valor = tipo_taladro.value
         plano_taladro_valor = plano_taladro.value
+        self.plano_taladro_valor = plano_taladro_valor
+
         if tipo_taladro_valor == '82':
             self.code += f'G{tipo_taladro_valor} G{plano_taladro_valor} X{x} Y{y} Z{z} P{p} R{r} F{self.selected_tool["fv"]} \n'
         elif tipo_taladro_valor== '83':
@@ -143,7 +154,7 @@ class CNC:
         position1 = 90
         
         if self.position != "incremental":
-            position1 = 91 # absoluto
+            position1 = 91
         
         if self.refrigerante == True:
             self.code += f'G00 Z{self.z} G40 M09\n'
@@ -152,15 +163,19 @@ class CNC:
 
         self.code += f'G28 G{position1} Z0.0 M05\n'
         self.code += f'M30\n'
-        #self.subrutinas[0] =
-
-
-
 
     def subrutina_externa(self,P):
-        self.code += f'M98 P{P}'
+        self.code += f'M98 P{P}\n'
 
+    def final_subrutina(self):
+        self.code += f'M99\n'
 
+    def subrutina_interna(self,P):
+        self.code += f'M97 P{P}\n'
+
+    def final_taladrado(self):
+        self.code += f'G80\n'
+    
 
 if __name__ == '__main__':
     cnc = CNC()

@@ -43,6 +43,7 @@ machine.arc_cut(
 )
 
 machine.move(
+    out_material=True,
     x=0.4,
     y=0.4
 )
@@ -70,6 +71,7 @@ machine.arc_cut(
 )
 
 machine.move(
+    out_material=True,
     x=0,
     y=0
 )
@@ -79,6 +81,7 @@ machine.cut_vertical(
 )
 
 machine.move(
+    out_material=True,
     x=0.4,
     y=-0.3
 )
@@ -103,6 +106,7 @@ machine.cut_line(
 )
 
 machine.move(
+    out_material=True,
     x=-1,
     y=-1.25
 )
@@ -138,5 +142,7 @@ machine.cut_line(
 )
 
 machine.exit()
-#print(machine.code)
+
 machine.export()
+print(machine.code)
+

@@ -98,37 +98,56 @@ machine.ciclo_de_taladrado(
     z=-0.06,
     p=1.25,
     r=0.2
-
-    #FALTA MODIFICAR el machine.move()
 )
 
-machine.subrutina_externa(
-    P=1023
+machine.subrutina_interna(
+    P=None
 )
 
 machine.exit()
 
+#SUBRUTINA DE TALADRADO
+machine.move(
+    x= 3,
+    y=5
+)
+machine.move(
+    x= 5,
+    y=7
+)
+machine.move(
+    cambiar_plano=True,
+    x= 7,
+    y=9
+)
+machine.move(
+    x= 9,
+    y=11
+)
+
+machine.move(
+    x= 3,
+    y=5
+)
+machine.final_taladrado()
+
+machine.final_subrutina()
+
 machine.export()
+print(machine.code)
 
 
-def subrutina_interna(machine):
-    machine.compensacion_ala(
-        derecha=False,
-        x=1,
-        y=2
-    )
 
-    machine.cut_line(
-        x=1.5,
-        y=3.2
-    )
 
-    machine.arc_cut(
-        clockwise=False,
-        x=3.5,
-        y=5.2,
-        r=2.0
-    )
+
+
+
+
+
+
+
+
+#def subrutina_interna(machine):
 
 #ref_subrutina = machine.crear_subrutina_interna(subrutina_interna)
 #machine.llamar_subrutina_interna(ref_subrutina)
