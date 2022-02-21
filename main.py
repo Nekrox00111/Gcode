@@ -13,40 +13,40 @@ class CNC:
     
     code = ''
     z=0
-    tools=[]
+    herramientas=[]
     refrigerante = False
-    position=''
+    posicion=''
 
 
-    def __init__(self,x,y,position,units,tools,id_proyecto,project_name,depth,z,refrigerante):
-        self.project_name = project_name
-        self.position = position
+    def __init__(self,x,y,posicion,unidades,herramientas,id_proyecto,nombre_proyecto,profundidad,z,refrigerante):
+        self.nombre_proyecto = nombre_proyecto
+        self.posicion = posicion
         self.z = z
-        self.tools = tools
+        self.herramientas = herramientas
         self.refrigerante = refrigerante
-        self.selected_tool=self.tools[0]
+        self.herramienta_seleccionada=self.herramientas[0]
 
-        units1 = 90
-        position1 = 20
+        unidades_num = 90
+        posicion_num = 20
         
-        if units != "pulgadas":
-            units1 = 91
-        if position != "absoluto":
-            position1 = 21 
+        if unidades != "pulgadas":
+            unidades_num = 91
+        if posicion != "absoluto":
+            posicion_num = 21 
         
-        self.code += f'O{id_proyecto} ({project_name}) \n'
-        self.code += f'T{self.selected_tool["id"]} M06 ({self.selected_tool["name"]})\n' 
-        self.code += f'G{units1} G{position1} G54 G00 X{x} Y{y}\n'
-        self.code += f'S{self.selected_tool["rpm"]} M03\n'
+        self.code += f'O{id_proyecto} ({nombre_proyecto}) \n'
+        self.code += f'T{self.herramienta_seleccionada["id"]} M06 ({self.herramienta_seleccionada["name"]})\n' 
+        self.code += f'G{unidades_num} G{posicion_num} G54 G00 X{x} Y{y}\n'
+        self.code += f'S{self.herramienta_seleccionada["rpm"]} M03\n'
 
         if self.refrigerante == True:
-            self.code += f'G43 H{self.selected_tool["id"]} Z{z} M08\n'
+            self.code += f'G43 H{self.herramienta_seleccionada["id"]} Z{z} M08\n'
         else:
-            self.code += f'G43 H{self.selected_tool["id"]} Z{z}\n'
+            self.code += f'G43 H{self.herramienta_seleccionada["id"]} Z{z}\n'
         
-        self.code += f'G01 Z{depth} F{self.selected_tool["fv"]}\n'
+        self.code += f'G01 Z{profundidad} F{self.herramienta_seleccionada["fv"]}\n'
 
-    def export(self,file_name=''):
+    def exportar(self,file_name=''):
         lines = self.code.splitlines()
         code = ''
 
@@ -54,37 +54,37 @@ class CNC:
             code += f'N{idx}    {line}\n'
             self.code = code
         
-        exported_filename = file_name or f'{self.project_name}.gcode'
+        exported_filename = file_name or f'{self.nombre_proyecto}.gcode'
 
         with open(exported_filename,'w') as f:
             f.write(code)
 
 
-    def cut_line(self,x,y):
+    def corte_lineal(self,x,y):
         self.code += f'G01 X{x} Y{y}\n'
     
-    def cut_vertical(self,depth):
-        self.code += f'G01 Z{depth} F{self.selected_tool["fv"]}\n'
+    def corte_vertical(self,profundidad):
+        self.code += f'G01 Z{profundidad} F{self.herramienta_seleccionada["fv"]}\n'
     
-    def arc_cut(self,x,y,clockwise,r):
+    def corte_enarco(self,x,y,dextrogiro,r):
         
-        if clockwise == True:
+        if dextrogiro == True:
             self.code += f'G02 X{x} Y{y} R{r}\n'
         else:
             self.code += f'G03 X{x} Y{y} R{r}\n'
 
 
-    def change_tool(self,tools,x,y,refrigerante):
+    def change_tool(self,herramientas,x,y,refrigerante):
         
-        tool_found = [tool for tool in self.tools if tool.get('id') == tools]
-        if not tool_found:
-            tool_found = [tool for tool in self.tools if tool.get('name') == tools]
-        if not tool_found:
-            tool_found = [tool for tool in self.tools if tool.get('label') == tools]
-        if not tool_found:
+        herramienta_encontrada = [tool for tool in self.herramientas if tool.get('id') == herramientas]
+        if not herramienta_encontrada:
+            herramienta_encontrada = [tool for tool in self.herramientas if tool.get('name') == herramientas]
+        if not herramienta_encontrada:
+            herramienta_encontrada = [tool for tool in self.herramientas if tool.get('label') == herramientas]
+        if not herramienta_encontrada:
             raise Exception('¡No se encontro herramienta deseada!')
 
-        self.selected_tool = tool_found[0]
+        self.herramienta_seleccionada = herramienta_encontrada[0]
 
         if self.refrigerante == True:
             self.code += f'G00 Z{self.z} M09\n'
@@ -92,34 +92,34 @@ class CNC:
             self.code += f'G00 Z{self.z}\n'
 
         self.code += f'G53 G49 Z0 M05 \n'
-        self.code += f'T{self.selected_tool["id"]} M06 ({self.selected_tool["name"]})\n' 
+        self.code += f'T{self.herramienta_seleccionada["id"]} M06 ({self.herramienta_seleccionada["name"]})\n' 
         self.code += f'G54 G00 X{x} Y{y} \n'
-        self.code += f'S{self.selected_tool["rpm"]} M03 \n'
+        self.code += f'S{self.herramienta_seleccionada["rpm"]} M03 \n'
 
         self.refrigerante = refrigerante
 
         if refrigerante == True:
-            self.code += f'G43 H{self.selected_tool["id"]} Z{self.z} M08\n'
+            self.code += f'G43 H{self.herramienta_seleccionada["id"]} Z{self.z} M08\n'
         else:
-            self.code += f'G43 H{self.selected_tool["id"]} Z{self.z} \n' 
+            self.code += f'G43 H{self.herramienta_seleccionada["id"]} Z{self.z} \n' 
 
-    def empty_circle(self,clockwise,x,y,depth,r):
-        if clockwise == True:
-            self.code += f'G12 X{x} Y{y} Z{depth} I{r} D{self.selected_tool["id"]} F{self.selected_tool["fh"]}\n'
+    def empty_circle(self,dextrogiro,x,y,profundidad,r):
+        if dextrogiro == True:
+            self.code += f'G12 X{x} Y{y} Z{profundidad} I{r} D{self.herramienta_seleccionada["id"]} F{self.herramienta_seleccionada["fh"]}\n'
         else:
-            self.code += f'G13 X{x} Y{y} Z{depth} I{r} D{self.selected_tool["id"]} F{self.selected_tool["fh"]}\n'
+            self.code += f'G13 X{x} Y{y} Z{profundidad} I{r} D{self.herramienta_seleccionada["id"]} F{self.herramienta_seleccionada["fh"]}\n'
         self.code += f'G00 Z{self.z} G40 \n'
 
-    def empty_spiral(self,clockwise,x,y,depth,K_radio,I_radio_Arco,Q):
-        if clockwise == True:
-            self.code += f'G12 X{x} Y{y} Z{depth} I{I_radio_Arco} K{K_radio} Q{Q} D{self.selected_tool["id"]} F{self.selected_tool["fh"]}\n'
+    def empty_spiral(self,dextrogiro,x,y,profundidad,K_radio,I_radio_Arco,Q):
+        if dextrogiro == True:
+            self.code += f'G12 X{x} Y{y} Z{profundidad} I{I_radio_Arco} K{K_radio} Q{Q} D{self.herramienta_seleccionada["id"]} F{self.herramienta_seleccionada["fh"]}\n'
         else:
-            self.code += f'G13 X{x} Y{y} Z{depth} I{I_radio_Arco} K{K_radio} Q{Q} D{self.selected_tool["id"]} F{self.selected_tool["fh"]}\n'
+            self.code += f'G13 X{x} Y{y} Z{profundidad} I{I_radio_Arco} K{K_radio} Q{Q} D{self.herramienta_seleccionada["id"]} F{self.herramienta_seleccionada["fh"]}\n'
         self.code += f'G00 Z{self.z} G40 \n'
 
-    def move(self,x,y,out_material=False,cambiar_plano = False):
+    def mover(self,x,y,fuera_material=False,cambiar_plano = False):
         
-        if out_material==True:
+        if fuera_material==True:
             self.code += f'G00 Z{self.z} G40 \n'
             self.code += f'G00 X{x} Y{y}\n'
         elif cambiar_plano == True:
@@ -134,9 +134,9 @@ class CNC:
         
     def compensacion_ala(self,derecha,x,y):
         if derecha == True:
-            self.code += f'G42 X{x} Y{y} D{self.selected_tool["id"]} F{self.selected_tool["fh"]} \n'
+            self.code += f'G42 X{x} Y{y} D{self.herramienta_seleccionada["id"]} F{self.herramienta_seleccionada["fh"]} \n'
         else:
-            self.code += f'G41 X{x} Y{y} D{self.selected_tool["id"]} F{self.selected_tool["fh"]} \n'
+            self.code += f'G41 X{x} Y{y} D{self.herramienta_seleccionada["id"]} F{self.herramienta_seleccionada["fh"]} \n'
 
     def ciclo_de_taladrado(self,tipo_taladro,plano_taladro,x,y,z,r,p=None,q=None):
         tipo_taladro_valor = tipo_taladro.value
@@ -144,16 +144,16 @@ class CNC:
         self.plano_taladro_valor = plano_taladro_valor
 
         if tipo_taladro_valor == '82':
-            self.code += f'G{tipo_taladro_valor} G{plano_taladro_valor} X{x} Y{y} Z{z} P{p} R{r} F{self.selected_tool["fv"]} \n'
+            self.code += f'G{tipo_taladro_valor} G{plano_taladro_valor} X{x} Y{y} Z{z} P{p} R{r} F{self.herramienta_seleccionada["fv"]} \n'
         elif tipo_taladro_valor== '83':
-            self.code += f'G{tipo_taladro_valor} G{plano_taladro_valor} X{x} Y{y} Z{z} Q{q} R{r} F{self.selected_tool["fv"]} \n'
+            self.code += f'G{tipo_taladro_valor} G{plano_taladro_valor} X{x} Y{y} Z{z} Q{q} R{r} F{self.herramienta_seleccionada["fv"]} \n'
         else:
-            self.code += f'G{tipo_taladro_valor} G{plano_taladro_valor} X{x} Y{y} Z{z} R{r} F{self.selected_tool["fv"]} \n'
+            self.code += f'G{tipo_taladro_valor} G{plano_taladro_valor} X{x} Y{y} Z{z} R{r} F{self.herramienta_seleccionada["fv"]} \n'
 
-    def exit(self):
+    def final(self):
         position1 = 90
         
-        if self.position != "incremental":
+        if self.posicion != "incremental":
             position1 = 91
         
         if self.refrigerante == True:
@@ -179,4 +179,4 @@ class CNC:
 
 if __name__ == '__main__':
     cnc = CNC()
-    cnc.export()
+    cnc.exportar()

@@ -9,140 +9,140 @@ T01 = {
     'fh': 5.0
 }
 
-machine = CNC(
+maquina = CNC(
     id_proyecto='0426',
-    project_name='Robot Face',
-    tools=[T01],
+    nombre_proyecto='Robot Face',
+    herramientas=[T01],
     refrigerante=False,
-    units='pulgadas',
-    position='absoluto',
+    unidades='pulgadas',
+    posicion='absoluto',
     z=0.25,
-    depth=-0.15,
+    profundidad=-0.15,
     x=-0.4,
     y=0.4
 )
 
-machine.compensacion_ala(
+maquina.compensacion_ala(
     derecha=True,
     x=-0.4,
     y=0.6
 )
 
-machine.arc_cut(
-    clockwise=True,
+maquina.corte_enarco(
+    dextrogiro=True,
     r=0.2,
     x=-0.4,
     y=0.2
 )
 
-machine.arc_cut(
-    clockwise=True,
+maquina.corte_enarco(
+    dextrogiro=True,
     r=0.2,
     x=-0.4,
     y=0.6
 )
 
-machine.move(
-    out_material=True,
+maquina.mover(
+    fuera_material=True,
     x=0.4,
     y=0.4
 )
 
-machine.cut_vertical(
-    depth=-0.15
+maquina.corte_vertical(
+    profundidad=-0.15
 )
 
-machine.compensacion_ala(
+maquina.compensacion_ala(
     derecha=True,
     x=0.4,
     y=0.6
 )
-machine.arc_cut(
-    clockwise=True,
+maquina.corte_enarco(
+    dextrogiro=True,
     r=0.2,
     x=0.4,
     y=0.2
 )
-machine.arc_cut(
-    clockwise=True,
+maquina.corte_enarco(
+    dextrogiro=True,
     r=0.2,
     x=0.4,
     y=0.6
 )
 
-machine.move(
-    out_material=True,
+maquina.mover(
+    fuera_material=True,
     x=0,
     y=0
 )
 
-machine.cut_vertical(
-    depth=-0.15
+maquina.corte_vertical(
+    profundidad=-0.15
 )
 
-machine.move(
-    out_material=True,
+maquina.mover(
+    fuera_material=True,
     x=0.4,
     y=-0.3
 )
 
-machine.cut_vertical(
-    depth=-0.15
+maquina.corte_vertical(
+    profundidad=-0.15
 )
 
-machine.cut_line(
+maquina.corte_lineal(
     x=0.4,
     y=-0.4
 )
 
-machine.cut_line(
+maquina.corte_lineal(
     x=-0.4,
     y=-0.4
 )
 
-machine.cut_line(
+maquina.corte_lineal(
     x=-0.4,
     y=-0.3
 )
 
-machine.move(
-    out_material=True,
+maquina.mover(
+    fuera_material=True,
     x=-1,
     y=-1.25
 )
 
-machine.cut_vertical(
-    depth=-0.15
+maquina.corte_vertical(
+    profundidad=-0.15
 )
 
-machine.compensacion_ala(
+maquina.compensacion_ala(
     derecha=True,
     x=-1.0,
     y=-1.0
 )
 
-machine.cut_line(
+maquina.corte_lineal(
     x=1.0,
     y=-1.0
 )
 
-machine.cut_line(
+maquina.corte_lineal(
     x=1.0,
     y=1.0
 )
 
-machine.cut_line(
+maquina.corte_lineal(
     x=-1.0,
     y=1.0
 )
 
-machine.cut_line(
+maquina.corte_lineal(
     x=-1.0,
     y=-1.0
 )
 
-machine.exit()
+maquina.final()
 
-machine.export()
-print(machine.code)
+maquina.exportar()
+print(maquina.code)
 

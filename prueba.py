@@ -19,15 +19,15 @@ T50 = {
 
 machine = CNC(
     id_proyecto='0004',
-    project_name="Aleta de Enfriamiento",
+    nombre_proyecto="Aleta de Enfriamiento",
     x=0,
     y=0,
     z=0.3,
     refrigerante=False,
-    position='absoluto',
-    units='pulgadas',
-    tools=[T45,T50],
-    depth = -0.15
+    posicion='absoluto',
+    unidades='pulgadas',
+    herramientas=[T45,T50],
+    profundidad = -0.15
 )
 
 machine.compensacion_ala(
@@ -36,13 +36,13 @@ machine.compensacion_ala(
     y=2
 )
 
-machine.cut_line(
+machine.corte_lineal(
     x=1.5,
     y=3.2
 )
 
-machine.arc_cut(
-    clockwise=False,
+machine.corte_enarco(
+    dextrogiro=False,
     x=3.5,
     y=5.2,
     r=2.0
@@ -51,37 +51,37 @@ machine.arc_cut(
 machine.change_tool(
     x=0.5,
     y=1.5,
-    tools = 'T50',
+    herramientas = 'T50',
     refrigerante = True
 )
 
 # machine.empty_circle(
 #     x=1,
 #     y=2,
-#     depth=-0.15,
+#     profundidad=-0.15,
 #     r=3/8,
-#     clockwise=False
+#     dextrogiro=False
 # )
 # levanta la herramienta automaticamente
 
 machine.empty_spiral(
     x=1,
     y=2,
-    depth=-0.15,
+    profundidad=-0.15,
     I_radio_Arco=0.05, #Es la I  
     K_radio = 3/8, #          I = Q <= Diametro Real de la herramienta de corte osea D(id de pieza)
     Q = 0.05,#Distancia entre recorridos de espiral
-    clockwise=False,
+    dextrogiro=False,
 )
 
 
-machine.move(
+machine.mover(
     x=3,
     y=0
 )
 
-machine.cut_vertical(
-    depth = -0.15 
+machine.corte_vertical(
+    profundidad = -0.15 
 )
 
 machine.compensacion_ala(
@@ -104,28 +104,28 @@ machine.subrutina_interna(
     P=None
 )
 
-machine.exit()
+machine.final()
 
 #SUBRUTINA DE TALADRADO
-machine.move(
+machine.mover(
     x= 3,
     y=5
 )
-machine.move(
+machine.mover(
     x= 5,
     y=7
 )
-machine.move(
+machine.mover(
     cambiar_plano=True,
     x= 7,
     y=9
 )
-machine.move(
+machine.mover(
     x= 9,
     y=11
 )
 
-machine.move(
+machine.mover(
     x= 3,
     y=5
 )
@@ -133,7 +133,7 @@ machine.final_taladrado()
 
 machine.final_subrutina()
 
-machine.export()
+machine.exportar()
 print(machine.code)
 
 
