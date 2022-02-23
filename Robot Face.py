@@ -1,4 +1,4 @@
-from main import CNC
+from PyCode import *
 
 T01 = {
     'name': 'Fresa Plana de 0.25"',

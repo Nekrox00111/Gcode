@@ -1,4 +1,4 @@
-from main import *
+from PyCode import *
 
 T45 = {
     'name': 'Fresa Plana de 0.3"',
@@ -17,7 +17,7 @@ T50 = {
     'fh': 5.0
 }
 
-machine = CNC(
+maquina = CNC(
     id_proyecto='0004',
     nombre_proyecto="Aleta de Enfriamiento",
     x=0,
@@ -30,67 +30,66 @@ machine = CNC(
     profundidad = -0.15
 )
 
-machine.compensacion_ala(
+maquina.compensacion_ala(
     derecha=False,
     x=1,
     y=2
 )
 
-machine.corte_lineal(
+maquina.corte_lineal(
     x=1.5,
     y=3.2
 )
 
-machine.corte_enarco(
+maquina.corte_enarco(
     dextrogiro=False,
     x=3.5,
     y=5.2,
     r=2.0
 )
 
-machine.change_tool(
+maquina.change_tool(
     x=0.5,
     y=1.5,
     herramientas = 'T50',
     refrigerante = True
 )
 
-# machine.empty_circle(
+# maquina.empty_circle(
 #     x=1,
 #     y=2,
 #     profundidad=-0.15,
 #     r=3/8,
 #     dextrogiro=False
 # )
-# levanta la herramienta automaticamente
 
-machine.empty_spiral(
-    x=1,
-    y=2,
-    profundidad=-0.15,
-    I_radio_Arco=0.05,
-    K_radio = 3/8, 
-    Q = 0.05,
-    dextrogiro=False,
-)
+# maquina.empty_spiral(
+#     x=1,
+#     y=2,
+#     profundidad=-0.15,
+#     I_radio_Arco=0.05,
+#     K_radio = 3/8, 
+#     Q = 0.05,
+#     dextrogiro=False,
+# )
 
 
-machine.mover(
+maquina.mover(
     x=3,
     y=0
 )
 
-machine.corte_vertical(
+maquina.corte_vertical(
     profundidad = -0.15 
 )
 
-machine.compensacion_ala(
+maquina.compensacion_ala(
     derecha = True,
     x=-1,
     y=-1
 )
 
-machine.ciclo_de_taladrado(
+maquina.ciclo_de_taladrado(
     tipo_taladro = CicloTaladro.centro, #CicloTaladro(.centro, .normal, .profundo)
     plano_taladro = Plano.retorno, #Retorno o Inicio 
     x=1,
@@ -100,38 +99,43 @@ machine.ciclo_de_taladrado(
     r=0.2
 )
 
-machine.subrutina_interna(
+maquina.subrutina_interna(
     P=25
 )
 
-machine.final()
+maquina.final()
 
-#SUBRUTINA DE TALADRADO
-machine.mover(
+#SUBRUTINA INTERNA DE TALADRADO
+
+maquina.mover(
     x= 3,
     y=5
 )
-machine.mover(
+maquina.mover(
     x= 5,
     y=7
 )
-machine.mover(
+maquina.mover(
     cambiar_plano=True,
     x= 7,
     y=9
 )
-machine.mover(
+maquina.mover(
     x= 9,
     y=11
 )
 
-machine.mover(
+maquina.mover(
     x= 3,
     y=5
 )
-machine.final_taladrado()
+maquina.final_taladrado()
 
-machine.final_subrutina()
+maquina.subrutina_externa(
+    P='0004'
+)
+
+maquina.final_subrutina()
 
 #machine.exportar()
-print(machine.code)
+print(maquina.code)

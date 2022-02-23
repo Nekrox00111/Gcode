@@ -18,7 +18,7 @@ class CNC:
     posicion=''
 
 
-    def __init__(self,x,y,posicion,unidades,herramientas,id_proyecto,nombre_proyecto,profundidad,z,refrigerante):
+    def __init__(self,x,y,posicion,unidades,herramientas,id_proyecto,nombre_proyecto,profundidad,z,refrigerante=False):
         self.nombre_proyecto = nombre_proyecto
         self.posicion = posicion
         self.z = z
@@ -66,7 +66,7 @@ class CNC:
     def corte_vertical(self,profundidad):
         self.code += f'G01 Z{profundidad} F{self.herramienta_seleccionada["fv"]}\n'
     
-    def corte_enarco(self,x,y,dextrogiro,r):
+    def corte_enarco(self,x,y,r,dextrogiro=True):
         
         if dextrogiro == True:
             self.code += f'G02 X{x} Y{y} R{r}\n'
@@ -103,14 +103,14 @@ class CNC:
         else:
             self.code += f'G43 H{self.herramienta_seleccionada["id"]} Z{self.z} \n' 
 
-    def empty_circle(self,dextrogiro,x,y,profundidad,r):
+    def empty_circle(self,x,y,profundidad,r,dextrogiro=True):
         if dextrogiro == True:
             self.code += f'G12 X{x} Y{y} Z{profundidad} I{r} D{self.herramienta_seleccionada["id"]} F{self.herramienta_seleccionada["fh"]}\n'
         else:
             self.code += f'G13 X{x} Y{y} Z{profundidad} I{r} D{self.herramienta_seleccionada["id"]} F{self.herramienta_seleccionada["fh"]}\n'
         self.code += f'G00 Z{self.z} G40 \n'
 
-    def empty_spiral(self,dextrogiro,x,y,profundidad,K_radio,I_radio_Arco,Q):
+    def empty_spiral(self,x,y,profundidad,K_radio,I_radio_Arco,Q,dextrogiro=True):
         if dextrogiro == True:
             self.code += f'G12 X{x} Y{y} Z{profundidad} I{I_radio_Arco} K{K_radio} Q{Q} D{self.herramienta_seleccionada["id"]} F{self.herramienta_seleccionada["fh"]}\n'
         else:
@@ -132,7 +132,7 @@ class CNC:
         else:
             self.code += f'X{x} Y{y}\n'
         
-    def compensacion_ala(self,derecha,x,y):
+    def compensacion_ala(self,x,y,derecha=True):
         if derecha == True:
             self.code += f'G42 X{x} Y{y} D{self.herramienta_seleccionada["id"]} F{self.herramienta_seleccionada["fh"]} \n'
         else:
