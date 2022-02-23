@@ -164,14 +164,15 @@ class CNC:
         self.code += f'G28 G{position1} Z0.0 M05\n'
         self.code += f'M30\n'
 
+
+    def subrutina_interna(self,P):
+        self.code += f'M97 P{P}\n'
+    
     def subrutina_externa(self,P):
         self.code += f'M98 P{P}\n'
 
     def final_subrutina(self):
         self.code += f'M99\n'
-
-    def subrutina_interna(self,P):
-        self.code += f'M97 P{P}\n'
 
     def final_taladrado(self):
         self.code += f'G80\n'

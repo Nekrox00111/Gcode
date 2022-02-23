@@ -143,6 +143,6 @@ maquina.corte_lineal(
 
 maquina.final()
 
-maquina.exportar()
+maquina.exportar(file_name="Robot Face.nc")
 print(maquina.code)
 

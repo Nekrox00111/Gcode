@@ -1,4 +1,4 @@
-from main import CNC, CicloTaladro,Plano
+from main import *
 
 T45 = {
     'name': 'Fresa Plana de 0.3"',
@@ -68,9 +68,9 @@ machine.empty_spiral(
     x=1,
     y=2,
     profundidad=-0.15,
-    I_radio_Arco=0.05, #Es la I  
-    K_radio = 3/8, #          I = Q <= Diametro Real de la herramienta de corte osea D(id de pieza)
-    Q = 0.05,#Distancia entre recorridos de espiral
+    I_radio_Arco=0.05,
+    K_radio = 3/8, 
+    Q = 0.05,
     dextrogiro=False,
 )
 
@@ -101,7 +101,7 @@ machine.ciclo_de_taladrado(
 )
 
 machine.subrutina_interna(
-    P=None
+    P=25
 )
 
 machine.final()
@@ -133,21 +133,5 @@ machine.final_taladrado()
 
 machine.final_subrutina()
 
-machine.exportar()
+#machine.exportar()
 print(machine.code)
-
-
-
-
-
-
-
-
-
-
-
-
-#def subrutina_interna(machine):
-
-#ref_subrutina = machine.crear_subrutina_interna(subrutina_interna)
-#machine.llamar_subrutina_interna(ref_subrutina)
