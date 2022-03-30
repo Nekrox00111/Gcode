@@ -1,6 +1,6 @@
 ## PyCode
 
-_Consiste en una libreria que genera código G._
+_Consiste en una libreria que genera los códigos G básicos para una Fresadora CNC._
 
 ## Ejemplos
 
