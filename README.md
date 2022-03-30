@@ -8,7 +8,6 @@ _Hay tres ejemplos de como utilizar esta libreria en el repositorio._
 
 * Robot Face.py
 * prueba.py
-* NoName.py
 
 ## Inicializando un proyecto
 
